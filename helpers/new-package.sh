@@ -5,6 +5,7 @@
 eval `resize`
 HEIGHT=15
 WIDTH=80
+ROOT_PATH=${ROOT_PATH:-$(pwd)}
 INSTALL_PATH=${INSTALL_PATH:-"${HOME}/.local/bin"}
 PACKAGES_PATH=${PACKAGES_PATH:-"../.packages"}
 IGNORED_EXT='(.tar.gz.asc|.txt|.tar.xz|.asc|.MD|.hsm|+ent.hsm)'
@@ -79,12 +80,12 @@ if [ "$packageType" = "bin" ] || [ "$packageType" = "tarball" ]; then
     else
         echo  "${VENDORPATH}/${APP} is new, continuing.."
     fi
-    VENDOR=$(whiptail --inputbox "Github Vendor" 8 78 "vendor" --title "Application Info" 3>&1 1>&2 2>&3)
+    VENDOR=$(whiptail --inputbox "Github Vendor" 8 78 "" --title "Application Info" 3>&1 1>&2 2>&3)
     if [ $? -ne 0 ]; then
         exit 0
     fi
 
-    REPO=$(whiptail --inputbox "Github Repo" 8 78 "repo" --title "Application Info" 3>&1 1>&2 2>&3)
+    REPO=$(whiptail --inputbox "Github Repo" 8 78 "" --title "Application Info" 3>&1 1>&2 2>&3)
     if [ $? -ne 0 ]; then
         exit 0
     fi
@@ -139,7 +140,7 @@ else
 fi
 
 export VENDOR APP DESC VERSION URL REPO
-echo "Template path for new application: ./${VENDORPATH}/${APP}"
+echo "Template path for new application: ${VENDORPATH}/${APP}"
 mkdir -p ${VENDORPATH}/${APP}
 
 ${INSTALL_PATH}/gomplate \
