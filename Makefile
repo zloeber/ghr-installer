@@ -17,7 +17,7 @@ RESET=$(shell tput sgr0)
 help: ## This help
 	@grep --no-filename -E '^[a-zA-Z_/-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
-reset: ## Remove pacakge app dir (but not INSTALL_PATH)
+deinit: ## Remove pacakge app dir (but not INSTALL_PATH)
 	rm -rf $(PACKAGES_PATH)
 
 init: ## Initialize package app dir
@@ -29,7 +29,8 @@ init: ## Initialize package app dir
  	fi
 	@mkdir -p $(INSTALL_PATH)
 
-deps: install/gomplate ## Install some dependencies
+deps: init ## Install some dependencies
+	make install gomplate
 
 install: init ## Install a package
 	@echo "$(BOLD)APP$(RESET): $(filter-out $@,$(MAKECMDGOALS))"
@@ -40,7 +41,7 @@ install: init ## Install a package
 	  exit 1; \
 	fi
 
-remove: ## Remove a package
+remove: init ## Remove a package
 	@if [ -f $(INSTALL_PATH)/$(filter-out $@,$(MAKECMDGOALS)) ]; then \
 	  rm -f $(INSTALL_PATH)/$(filter-out $@,$(MAKECMDGOALS)); \
 	  echo "Deleted $(filter-out $@,$(MAKECMDGOALS))"; \
@@ -61,6 +62,9 @@ show: ## Shows some settings
 
 list: ## Show a list of URLs for vendor/package
 	@helpers/get-releases.sh $(filter-out $@,$(MAKECMDGOALS))
+
+packages: init ## List available packages
+	@make -C ${VENDOR_PATH} help
 
 %: ## A parameter
 	@true

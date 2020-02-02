@@ -33,6 +33,9 @@ The vendor/repo combo are in the github url for a project (ie. https://github.co
 # Show help
 make
 
+# Install k3d binary to default location of ${HOME}/.local/bin
+make install k3d
+
 # Install jx to ${HOME}/.local/jx then remove it
 export INSTALL_PATH=${HOME}/.local/jx
 make install jx
@@ -47,8 +50,25 @@ make new
 
 # List all the most recent release download URLs for a github project
 make list jenkins-x/jx
+
+# Show all packages already available in cloudeposse/packages
+make packages
+```
+## Tips
+
+If you are not wanting to have to dive into this project everytime you want to run some app one can setup an alias quite easily.
+
+```bash
+alias githubapp="make -C ${HOME}/.local/app/ghr-installer"
 ```
 
+Using the above alias assumes this project has been clone to ${HOME}/.local/app/ghr-installer. Once this has been sourced into your shell you can then run githubapp from anywhere to install or try to install applications from github.
+
+```bash
+githubapp install k3d
+githubapp list kubernetes/minikube
+githubapp packages
+```
 ## Limitations
 
 Simple package installations should work mostly ok. Anything more complex should be authored into a proper cloudposse/packages package and a PR should be submit to add to the upstream project.
