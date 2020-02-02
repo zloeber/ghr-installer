@@ -1,0 +1,6 @@
+
+include $(PACKAGES_PATH)/tasks/Makefile.package
+
+install:
+	echo "${PACKAGE_TYPE}"
+	$(call download_${PACKAGE_TYPE})
