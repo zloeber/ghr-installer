@@ -5,10 +5,11 @@
 eval `resize`
 HEIGHT=15
 WIDTH=80
-INSTALL_PATH=${INSTALL_PATH:-"${HOME}/.local/bin"}
-PACKAGES_PATH=".packages"
-IGNORED_EXT='(.tar.gz.asc|.txt|.tar.xz|.asc|.MD|.hsm|+ent.hsm|rpm|deb|sha256)'
 ROOT_PATH=${ROOT_PATH:-$(pwd)}
+INSTALL_PATH=${INSTALL_PATH:-"${HOME}/.local/bin"}
+PACKAGES_PATH="${PACKAGES_PATH:-"${ROOT_PATH}/.packages"}"
+
+IGNORED_EXT='(.tar.gz.asc|.txt|.tar.xz|.asc|.MD|.hsm|+ent.hsm|rpm|deb|sha256)'
 OS="${OS:-"linux"}"
 ARCH="${ARCH:-"amd64"}"
 VENDORPATH=${PACKAGES_PATH}/vendor
@@ -50,26 +51,29 @@ function get_github_version_by_tag {
 }
 
 export PACKAGE_EXE=$(whiptail --inputbox "App Name" 8 78 --title "Application Info" 3>&1 1>&2 2>&3)
-if [ $? -ne 0 ]; then
-    exit 0
+if [ $? -ne 0 ] || [ -z $PACKAGE_EXE ]; then
+    echo "App name is required."
+    exit 1
 fi
 
 if [ -d "${VENDORPATH}/${PACKAGE_EXE}" ]; then
     echo  "${VENDORPATH}/${PACKAGE_EXE} already exists, installing.."
-    make -C ${ROOT_PATH} install/${PACKAGE_EXE}
+    make -C ${ROOT_PATH} install ${PACKAGE_EXE}
     exit 0
 else
     echo  "${VENDORPATH}/${PACKAGE_EXE} is new, continuing.."
 fi
 
 export VENDOR=$(whiptail --inputbox "Github Vendor Name" 8 78 "" --title "Application Info" 3>&1 1>&2 2>&3)
-if [ $? -ne 0 ]; then
-    exit 0
+if [ $? -ne 0 ] || [ -z $VENDOR ]; then
+    echo "Github vendor name is required."
+    exit 1
 fi
 
 REPO=$(whiptail --inputbox "Github Repo Name" 8 78 "" --title "Application Info" 3>&1 1>&2 2>&3)
-if [ $? -ne 0 ]; then
-    exit 0
+if [ $? -ne 0 ] || [ -z $REPO ]; then
+    echo "Github repo name is required."
+    exit 1
 fi
 
 latesturl=(`get_github_urls_by_platform "${VENDOR}/${REPO}" | grep -v -E "${IGNORED_EXT}"`)
@@ -81,8 +85,9 @@ for ((i=0;i<cnt;i++)); do
 done
 
 export DOWNLOAD_URL=$(whiptail --title "App URLs" --menu "Choose URL" 16 120 10 "${applist[@]}" 3>&1 1>&2 2>&3)
-if [ $? -ne 0 ]; then
-    exit 0
+if [ $? -ne 0 ] || [ -z $DOWNLOAD_URL ]; then
+    echo "Download url is required"
+    exit 1
 fi
 
 OPTIONS=(tarball ".tar.gz"
@@ -100,7 +105,8 @@ packageType=$(whiptail \
     "${OPTIONS[@]}" \
     3>&1 1>&2 2>&3)
 if [ $? -ne 0 ]; then
-    exit 0
+    echo "Cancelled."
+    exit 1
 fi
 
 export PACKAGE_TYPE=${packageType}

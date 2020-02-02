@@ -33,14 +33,20 @@ The vendor/repo combo are in the github url for a project (ie. https://github.co
 # Show help
 make
 
-# Install jx to ${HOME}/.local/jx
-make install/jx INSTALL_PATH=${HOME}/.local/jx
+# Install jx to ${HOME}/.local/jx then remove it
+export INSTALL_PATH=${HOME}/.local/jx
+make install jx
+make remove jx
 
-# walkthrough the installation of a new package from github (unless the app name already exists in packages, then it will simply be installed)
-make install
+# Walkthrough the installation of a new package from github 
+# (unless the app name already exists in packages, then it will simply be installed)
+make helper
 
 # Walthrough the addition of a new package to packages (including hashicorp sourced apps)
 make new
+
+# List all the most recent release download URLs for a github project
+make list jenkins-x/jx
 ```
 
 ## Limitations

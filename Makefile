@@ -31,30 +31,36 @@ init: ## Initialize package app dir
 
 deps: install/gomplate ## Install some dependencies
 
-install/%: init ## Install a package
-	@echo "$(BOLD)APP$(RESET): $(subst install/,,$@)"
-	@if [ -d $(VENDOR_PATH)/$(subst install/,,$@) ]; then \
-	  make -C $(VENDOR_PATH)/$(subst install/,,$@) install; \
+install: init ## Install a package
+	@echo "$(BOLD)APP$(RESET): $(filter-out $@,$(MAKECMDGOALS))"
+	@if [ -d $(VENDOR_PATH)/$(filter-out $@,$(MAKECMDGOALS)) ]; then \
+	  make -C $(VENDOR_PATH)/$(filter-out $@,$(MAKECMDGOALS)) install; \
 	else \
-	  echo "$(subst install/,,$@) not available"; \
+	  echo "$(filter-out $@,$(MAKECMDGOALS)) not available"; \
 	  exit 1; \
 	fi
 
-remove/%: ## Remove a package
-	@if [ -f $(INSTALL_PATH)/$(subst remove/,,$@) ]; then \
-	  rm -f $(INSTALL_PATH)/$(subst remove/,,$@); \
-	  echo "Deleted $(subst remove/,,$@)"; \
+remove: ## Remove a package
+	@if [ -f $(INSTALL_PATH)/$(filter-out $@,$(MAKECMDGOALS)) ]; then \
+	  rm -f $(INSTALL_PATH)/$(filter-out $@,$(MAKECMDGOALS)); \
+	  echo "Deleted $(filter-out $@,$(MAKECMDGOALS))"; \
 	else \
-	  echo "$(subst remove/,,$@) not installed"; \
+	  echo "$(filter-out $@,$(MAKECMDGOALS)) not installed"; \
 	fi
 
 new: deps ## Add a new package
 	helpers/new-package.sh
 
-install: ## Walkthrough a package install
+helper: ## Walkthrough a package install
 	helpers/install-package.sh
 
 show: ## Shows some settings
 	@echo "$(BOLD)ROOT_PATH$(RESET): $(ROOT_PATH)"
 	@echo "$(BOLD)INSTALL_PATH$(RESET): $(INSTALL_PATH)"
 	@echo "$(BOLD)PACKAGES_PATH$(RESET): $(PACKAGES_PATH)"
+
+list: ## Show a list of URLs for vendor/package
+	@helpers/get-releases.sh $(filter-out $@,$(MAKECMDGOALS))
+
+%: ## A parameter
+	@true
