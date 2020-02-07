@@ -90,6 +90,14 @@ if [ $? -ne 0 ] || [ -z $DOWNLOAD_URL ]; then
     exit 1
 fi
 
+## Try to extract the latest version
+# First look for x.x.x
+VERSION=`echo "${latesturl}" | grep -o -E '[0-9]+.[0-9]+.[0-9]+' | head -1`
+# Then look for x.x
+if [ -z $VERSION ]; then
+    VERSION=`echo "${latesturl}" | grep -o -E '[0-9]+.[0-9]+' | head -1`
+fi
+
 OPTIONS=(tarball ".tar.gz"
          binary "straight binary"
          zip ".zip"
@@ -112,3 +120,33 @@ fi
 export PACKAGE_TYPE=${packageType}
 export PACKAGE_NAME=${PACKAGE_EXE}
 make -f ${ROOT_PATH}/helpers/Makefile.package install
+
+## Attempt to tokenize the DOWNLOAD_URL next
+# Construct a generic url to use based on selections
+PACKAGE_REPO_URL="https://github.com/${VENDOR}/${REPO}"
+URL=${DOWNLOAD_URL//${PACKAGE_REPO_URL}/\$(PACKAGE_REPO_URL)}
+URL=${URL//${VERSION}/\$(PACKAGE_VERSION)}
+URL=${URL//${PACKAGE_EXE}/\$(PACKAGE_NAME)}
+URL=`echo $URL | sed -r 's/(linux|Linux|darwin|Darwin)/$(OS)/g' | \
+    sed -r 's/(amd64|Amd64|AMD64|x86-64|x86_64|x64)/$(ARCH)/g'`
+
+export VENDOR PACKAGE_EXE VERSION URL REPO PACKAGE_TYPE
+echo "Template path for new application: ${VENDORPATH}/${PACKAGE_EXE}"
+mkdir -p ${VENDORPATH}/${PACKAGE_EXE}
+
+${INSTALL_PATH}/gomplate \
+--input-dir ${ROOT_PATH}/templates/generic \
+--output-dir ${VENDORPATH}/${PACKAGE_EXE}
+
+if [ -d ${VENDORPATH}/${APP} ]; then
+  echo "Package Path: ${VENDORPATH}/${PACKAGE_EXE}"
+  echo "VENDOR: ${VENDOR}"
+  echo "REPO: ${REPO}"
+  echo "PACKAGE_EXE: ${PACKAGE_EXE}"
+  echo "VERSION: ${VERSION}"
+  echo "URL: ${URL}"
+  echo "PACKAGE_TYPE: ${PACKAGE_TYPE}"
+  echo ""
+  echo "This package has been saved for future installation."
+  echo "Please consider submitting this package to cloudposse/packages via a PR as well."
+fi

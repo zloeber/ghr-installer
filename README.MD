@@ -69,6 +69,9 @@ githubapp install k3d
 githubapp list kubernetes/minikube
 githubapp packages
 ```
+
+This wrapper will automatically add a generic .packages/vendor/app folder for a future installation of your package. This can be removed to start the helper wizard again or better yet, you can review it and submit a PR to the upstream cloudposse/packages repo with it instead!
+
 ## Limitations
 
 Simple package installations should work mostly ok. Anything more complex should be authored into a proper cloudposse/packages package and a PR should be submit to add to the upstream project.

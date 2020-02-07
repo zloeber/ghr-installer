@@ -52,7 +52,7 @@ remove: init ## Remove a package
 new: deps ## Add a new package
 	helpers/new-package.sh
 
-helper: ## Walkthrough a package install
+helper: deps ## Walkthrough a package install
 	helpers/install-package.sh
 
 show: ## Shows some settings

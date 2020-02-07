@@ -92,6 +92,13 @@ if [ "$packageType" = "bin" ] || [ "$packageType" = "tarball" ]; then
 
     latesturl=`get_github_urls_by_platform "${VENDOR}/${REPO}" | grep -v -E "${IGNORED_EXT}"`
     latestversion=`get_github_version_by_tag "${VENDOR}/${REPO}" | grep -o -E '[0-9]+.[0-9]+.[0-9]+'`
+
+    ## If unable to find a latest version by tag, attempt to guess one instead.
+    # First look for x.x.x
+    if [ -z $latestversion ]; then
+        latestversion=`echo "${latesturl}" | grep -o -E '[0-9]+.[0-9]+.[0-9]+' | head -1`
+    fi
+    # Then look for x.x
     if [ -z $latestversion ]; then
         latestversion=`echo "${latesturl}" | grep -o -E '[0-9]+.[0-9]+.[0-9]+' | head -1`
     fi
