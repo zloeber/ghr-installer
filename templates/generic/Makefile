@@ -6,7 +6,7 @@ export VENDOR = {{ .Env.VENDOR }}
 export PACKAGE_NAME = {{ .Env.PACKAGE_EXE }}
 export PACKAGE_REPO_NAME = {{ .Env.REPO }}
 export DOWNLOAD_URL ?= {{ .Env.URL }}
-export APK_BUILD_TEMPLATE ?= APKBUILD.github-{{ .Env.PACKAGE_TYPE }}
+export APK_BUILD_TEMPLATE ?= APKBUILD.github-binary
 
 ## Uncomment only if you need additional libraries
 #export APKBUILD_DEPENDS += libc6-compat musl
