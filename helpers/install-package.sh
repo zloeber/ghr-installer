@@ -8,7 +8,6 @@ WIDTH=80
 ROOT_PATH=${ROOT_PATH:-$(pwd)}
 INSTALL_PATH=${INSTALL_PATH:-"${HOME}/.local/bin"}
 PACKAGES_PATH="${PACKAGES_PATH:-"${ROOT_PATH}/.packages"}"
-
 IGNORED_EXT='(.tar.gz.asc|.txt|.tar.xz|.asc|.MD|.hsm|+ent.hsm|rpm|deb|sha256)'
 OS="${OS:-"linux"}"
 ARCH="${ARCH:-"amd64"}"
@@ -40,6 +39,18 @@ function get_github_urls_by_platform {
 	curl -s "https://api.github.com/repos/${vendorapp}/releases/latest" | \
         jq -r --arg OS ${OS} --arg ARCH ${ARCH} \
         '.assets[] | .browser_download_url'
+}
+
+function get_github_project_description {
+    # Description: Scrape github project for its description
+    local vendorapp="${1?"Usage: $0 vendor/app"}"
+	curl -s "https://api.github.com/repos/${vendorapp}" | jq -r '.description'
+}
+
+function get_github_project_license {
+    # Description: Scrape github project for its license
+    local vendorapp="${1?"Usage: $0 vendor/app"}"
+	curl -s "https://api.github.com/repos/${vendorapp}" | jq -r '.license.spdx_id'
 }
 
 function get_github_version_by_tag {
@@ -130,7 +141,10 @@ URL=${URL//${PACKAGE_EXE}/\$(PACKAGE_NAME)}
 URL=`echo $URL | sed -r 's/(linux|Linux|darwin|Darwin)/$(OS)/g' | \
     sed -r 's/(amd64|Amd64|AMD64|x86-64|x86_64|x64)/$(ARCH)/g'`
 
-export VENDOR PACKAGE_EXE VERSION URL REPO PACKAGE_TYPE
+DESC=`get_github_project_description ${VENDOR}/${REPO}`
+LICENSE=`get_github_project_license ${VENDOR}/${REPO}`
+
+export VENDOR PACKAGE_EXE VERSION URL REPO PACKAGE_TYPE DESC LICENSE
 echo "Template path for new application: ${VENDORPATH}/${PACKAGE_EXE}"
 mkdir -p ${VENDORPATH}/${PACKAGE_EXE}
 
@@ -142,6 +156,8 @@ if [ -d ${VENDORPATH}/${APP} ]; then
   echo "Package Path: ${VENDORPATH}/${PACKAGE_EXE}"
   echo "VENDOR: ${VENDOR}"
   echo "REPO: ${REPO}"
+  echo "DESC: ${DESC}"
+  echo "LICENSE: ${LICENSE}"
   echo "PACKAGE_EXE: ${PACKAGE_EXE}"
   echo "VERSION: ${VERSION}"
   echo "URL: ${URL}"
