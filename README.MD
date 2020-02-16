@@ -17,7 +17,17 @@ This is a simple makefile with some trivial amounts of bash scripting. Simply ru
 
 Any installed application will be dropped into `INSTALL_PATH` which we set to `${HOME}/.local/bin` by default. This aligns with where pip tends to install apps if run with the --user flag and is my personal preference. One can easily change this by exporting `INSTALL_PATH` beforehand or including `INSTALL_PATH` as a task parameter;
 
-If you are using this to install an already packaged up application and you know that application name simply run `make install/<appname>` otherwise run `make install` to be prompted for more information on the app you wish to install.
+## Tasks
+
+To list apps which already have a prescripted package: `make list`
+
+### Existing Apps
+To install an already packaged application run: `make install <appname>`.
+
+This will also work for any packages which you have done a walkthrough installation of via this script (we create a generic package and store it in .packages/vendor/<<appname>> for future installs)
+
+### New Apps
+To be prompted for more information on a new app you wish to install run: `make install`
 
 Generically, you need 3 bits of information for installing an app from github when using this script:
 

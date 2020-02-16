@@ -50,20 +50,20 @@ remove: init ## Remove a package
 	fi
 
 new: deps ## Add a new package
-	helpers/new-package.sh
+	helpers/new.sh
 
-helper: deps ## Walkthrough a package install
-	helpers/install-package.sh
+walkthrough: deps ## Walkthrough a package install
+	helpers/walkthrough.sh
 
 show: ## Shows some settings
 	@echo "$(BOLD)ROOT_PATH$(RESET): $(ROOT_PATH)"
 	@echo "$(BOLD)INSTALL_PATH$(RESET): $(INSTALL_PATH)"
 	@echo "$(BOLD)PACKAGES_PATH$(RESET): $(PACKAGES_PATH)"
 
-list: ## Show a list of URLs for vendor/package
+list/urls: ## Show a list of URLs for vendor/package
 	@helpers/get-releases.sh $(filter-out $@,$(MAKECMDGOALS))
 
-packages: init ## List available packages
+list: init ## List available packages
 	@make -C ${VENDOR_PATH} help
 
 %: ## A parameter
