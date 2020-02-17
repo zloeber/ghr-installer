@@ -2,7 +2,6 @@ SHELL:=/bin/bash
 ROOT_PATH:=$(abspath $(patsubst %/,%,$(dir $(abspath $(lastword $(MAKEFILE_LIST))))))
 .DEFAULT_GOAL:=help
 
-export PACKAGES_VERSION ?= master
 export PACKAGES_PATH ?= $(ROOT_PATH)/.packages
 export INSTALL_PATH ?= $(HOME)/.local/bin
 export VENDOR_PATH ?= $(PACKAGES_PATH)/vendor
@@ -21,13 +20,13 @@ deinit: ## Remove pacakge app dir (but not INSTALL_PATH)
 	rm -rf $(PACKAGES_PATH)
 
 init: ## Initialize package app dir
-	@if [ ! -d $(PACKAGES_PATH) ]; then \
-	  echo "Installing packages $(PACKAGES_VERSION)..."; \
-	  rm -rf $(PACKAGES_PATH); \
- 	  git clone --depth=1 -b $(PACKAGES_VERSION) https://github.com/cloudposse/packages.git $(PACKAGES_PATH); \
- 	  rm -rf $(PACKAGES_PATH)/.git; \
- 	fi
 	@mkdir -p $(INSTALL_PATH)
+ifeq (,$(wildcard $(PACKAGES_PATH)))
+	@echo "Installing packages to $(PACKAGES_PATH)"
+	git clone --depth=1 https://github.com/cloudposse/packages.git $(PACKAGES_PATH)
+endif
+	@echo "Updating packages..."
+	cd $(PACKAGES_PATH) && git pull	
 
 deps: init ## Install some dependencies
 	make install gomplate
