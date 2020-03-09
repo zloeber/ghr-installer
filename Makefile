@@ -51,6 +51,9 @@ remove: init ## Remove a package
 new: deps ## Add a new package
 	helpers/new.sh
 
+auto: deps ## Add a new package
+	helpers/auto.sh $(filter-out $@,$(MAKECMDGOALS))
+
 walkthrough: deps ## Walkthrough a package install
 	helpers/walkthrough.sh
 

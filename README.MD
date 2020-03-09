@@ -23,12 +23,12 @@ Here are some basic tasks this project can perform.
 
 ### List Available Apps
 
-To list apps which already have a prescripted package: `make list`
+To list apps which already have been packaged: `make list`
 
 ### Existing Apps
 To install an already packaged application run: `make install <appname>`.
 
-This will also work for any packages which you have done a walkthrough installation of via this script (we create a generic package and store it in .packages/vendor/<<appname>> for future installs)
+This will also work for any packages which you have done a walkthrough or auto installation of via this script (we create a generic package and store it in .packages/vendor/<<appname>> for future installs)
 
 ### New Apps
 To be prompted for more information on a new app you wish to install run: `make new`
@@ -44,6 +44,14 @@ The vendor/repo combo are in the github url for a project (ie. https://github.co
 > **NOTE**: At the first step, if you enter in an app that already exists in the '.packages/vendors' folder it will simply be installed again at that point.
 
 If the vendor/repo has releases which are able to be downloaded the latest version will be displayed for selection. Once chosen you will then be prompted for an installation type. Generally this lines up with the file format being downloaded so pay attention to the download URL you have chosen in the prior step!
+
+### Auto Apps
+
+This is the same as the new app (`make new`) walkthrough but without the prompting nonsense. This generates the same packages bundle as the walkthrough. You just need to provide the vendor/repo and app (or, if the repo and app name are the same just the vendor/repo)
+
+```bash
+make auto zloeber/githubinfo
+```
 
 ### List Download URLs
 
