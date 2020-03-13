@@ -75,6 +75,12 @@ make install jx INSTALL_PATH=${HOME}/.jx/bin
 # Then remove it
 make remove jx
 
+# Then remove its package definition as well
+make reset jx
+
+# Now recreate the package and reinstall it from the most recent version
+make auto jx/jx
+
 # Walkthrough the installation of a new package from github 
 # (unless the app name already exists, then it will simply be installed)
 make new
@@ -83,7 +89,7 @@ make new
 make walkthrough
 
 # List all the most recent release download URLs for a github project
-make list/urls jenkins-x/jx
+make urls jenkins-x/jx
 ```
 
 ## Tips
@@ -92,7 +98,7 @@ make list/urls jenkins-x/jx
 If you are not wanting to have to dive into this project everytime you want to install some app, one can setup an alias quite easily. In this case we assume you have cloned this repo into `${HOME}/.local/app/ghr-installer`
 
 ```bash
-alias githubapp="make -C ${HOME}/.local/app/ghr-installer"
+alias githubapp="make --no-print-directory -C ${HOME}/.local/app/ghr-installer"
 ```
 
 Once this has been sourced into your shell you can then run githubapp from anywhere.
@@ -101,6 +107,7 @@ Once this has been sourced into your shell you can then run githubapp from anywh
 githubapp install k3d
 githubapp list/urls kubernetes/minikube
 githubapp new
+githubapp auto mumoshu/variant
 ```
 
 ### Package Cache

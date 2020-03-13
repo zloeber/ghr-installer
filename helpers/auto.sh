@@ -71,7 +71,7 @@ function get_github_version_by_tag {
 
 if [ -d "${VENDORPATH}/${PACKAGE_EXE}" ]; then
     echo  "${VENDORPATH}/${PACKAGE_EXE} already exists, installing.."
-    make -C ${ROOT_PATH} install ${PACKAGE_EXE}
+    make --no-print-directory -C ${ROOT_PATH} install ${PACKAGE_EXE}
     exit 0
 else
     echo  "${VENDORPATH}/${PACKAGE_EXE} is new, continuing.."
@@ -117,7 +117,7 @@ esac;
 
 export PACKAGE_TYPE=${packageType}
 export PACKAGE_NAME=${PACKAGE_EXE}
-make -f ${ROOT_PATH}/helpers/Makefile.package install
+make --no-print-directory -f ${ROOT_PATH}/helpers/Makefile.package install
 
 ## Attempt to tokenize the DOWNLOAD_URL next
 # Construct a generic url to use based on selections
