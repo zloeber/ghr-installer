@@ -79,7 +79,7 @@ make remove jx
 make reset jx
 
 # Now recreate the package and reinstall it from the most recent version
-make auto jx/jx
+make auto jenkins-x/jx
 
 # Walkthrough the installation of a new package from github 
 # (unless the app name already exists, then it will simply be installed)

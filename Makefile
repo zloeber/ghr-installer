@@ -46,12 +46,12 @@ install: init ## Install a package
 	  exit 1; \
 	fi
 
-uninstall: init ## Remove installed package
-	@if [ -f $(INSTALL_PATH)/$(filter-out $@,$(MAKECMDGOALS)) ]; then \
+uninstall: ## Remove installed package
+	@if [ "$(INSTALL_PATH)/$(filter-out $@,$(MAKECMDGOALS))" != "$(INSTALL_PATH)/" ]; then \
 	  rm -f $(INSTALL_PATH)/$(filter-out $@,$(MAKECMDGOALS)); \
-	  echo "Deleted $(filter-out $@,$(MAKECMDGOALS))"; \
+	  echo "Deleted: $(INSTALL_PATH)/$(filter-out $@,$(MAKECMDGOALS))"; \
 	else \
-	  echo "$(filter-out $@,$(MAKECMDGOALS)) not installed"; \
+	  echo "$(BOLD)No app name provided!$(RESET)"; \
 	fi
 
 reset: ## Reset a package definition.
