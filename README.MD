@@ -73,7 +73,7 @@ make install k3d
 make install jx INSTALL_PATH=${HOME}/.jx/bin
 
 # Then remove it
-make remove jx
+make uninstall jx
 
 # Then remove its package definition as well
 make reset jx
@@ -81,18 +81,20 @@ make reset jx
 # Now recreate the package and reinstall it from the most recent version
 make auto jenkins-x/jx
 
+# List all the most recent release download URLs for a github project
+make urls jenkins-x/jx
+
 # Walkthrough the installation of a new package from github 
 # (unless the app name already exists, then it will simply be installed)
 make new
 
-# Walthrough the addition of a new package to packages (including hashicorp sourced apps)
+# Walthrough the addition of a new package to packages (including hashicorp sourced apps like vagrant or consul)
 make walkthrough
-
-# List all the most recent release download URLs for a github project
-make urls jenkins-x/jx
 ```
 
 ## Tips
+
+A few tips on how to use this to make your life a little easier:
 
 ### Setup an Alias
 If you are not wanting to have to dive into this project everytime you want to install some app, one can setup an alias quite easily. In this case we assume you have cloned this repo into `${HOME}/.local/app/ghr-installer`
@@ -105,7 +107,7 @@ Once this has been sourced into your shell you can then run githubapp from anywh
 
 ```bash
 githubapp install k3d
-githubapp list/urls kubernetes/minikube
+githubapp urls kubernetes/minikube
 githubapp new
 githubapp auto mumoshu/variant
 ```
