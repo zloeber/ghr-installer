@@ -4,16 +4,41 @@ Github Releases Installer
 
 ## Description
 
-This is a wrapper for cloudposse/packages which makes authoring new packages for it a bit easier. As an additional benefit, this project allows for arbitrary github releases to be installed a bit more quickly on a system.
+This project allows for arbitrary github releases to be installed a bit more quickly on a system. As such, it can serve as a generic installer for your local non-root user based binary installs of github releases.
+
+## How It Works
+This started as a wrapper for cloudposse/packages to make authoring new packages for it a bit easier. Each package in this project is essentially a Makefile with some additional dressing that define how to install the app. This project automates the construction of those packages and runs them.
 
 ## Features
 
-- Adds whiptail based console GUI helper functions for adding new vendor package templates to cloudposse/packages
-- Serves as a generic installer for your local non-root user based binary installs of github releases
+- Auto-detect and install latest versions of single binary releases from github releases. 
+- Whiptail based console GUI helper functions for adding new vendor package templates to cloudposse/packages
+
+## Installation
+
+Clone this repo into a folder of your choice. Run `make` to see the list of tasks. 
+
+### Setup an Alias
+If you are not wanting to have to dive into this project folder everytime you want to install some app, you can setup an alias quite easily. In this example we clone this repo into `${HOME}/.local/app/ghr-installer`
+
+```bash
+mkdir -p ${HOME}/.local/app
+git clone git@github.com:zloeber/ghr-installer.git ${HOME}/.local/app/ghr-installer
+alias githubapp="make --no-print-directory -C ${HOME}/.local/app/ghr-installer"
+```
+
+Once this has been sourced into your shell you can then run githubapp from anywhere.
+
+```bash
+githubapp install k3d
+githubapp urls kubernetes/minikube
+githubapp new
+githubapp auto mumoshu/variant
+```
 
 ## Usage
 
-This is a simple makefile with some trivial amounts of bash scripting. Simply run `make` to see all available tasks.
+This is a simple makefile with some trivial amounts of bash scripting. Simply run `make` to see all available tasks. It is 
 
 Any installed application will be dropped into `INSTALL_PATH` which we set to `${HOME}/.local/bin` by default. This aligns with where pip tends to install apps if run with the --user flag and is my personal preference. One can easily change this by exporting `INSTALL_PATH` beforehand or including `INSTALL_PATH` as a task parameter;
 
@@ -92,27 +117,7 @@ make new
 make walkthrough
 ```
 
-## Tips
-
-A few tips on how to use this to make your life a little easier:
-
-### Setup an Alias
-If you are not wanting to have to dive into this project everytime you want to install some app, one can setup an alias quite easily. In this case we assume you have cloned this repo into `${HOME}/.local/app/ghr-installer`
-
-```bash
-alias githubapp="make --no-print-directory -C ${HOME}/.local/app/ghr-installer"
-```
-
-Once this has been sourced into your shell you can then run githubapp from anywhere.
-
-```bash
-githubapp install k3d
-githubapp urls kubernetes/minikube
-githubapp new
-githubapp auto mumoshu/variant
-```
-
-### Package Cache
+## Package Cache
 
 This wrapper will automatically add a generic .packages/vendor/app folder for a future installation of the package. This can be removed to start the helper wizard again. Optionally, you can back this up for your own future use.
 
