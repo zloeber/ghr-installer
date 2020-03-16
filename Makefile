@@ -56,7 +56,7 @@ uninstall: ## Remove installed package
 
 reset: ## Reset a package definition.
 	@if [ "$(VENDOR_PATH)/$(filter-out $@,$(MAKECMDGOALS))" != "$(VENDOR_PATH)/" ]; then \
-          rm -rf $(INSTALL_PATH)/$(filter-out $@,$(MAKECMDGOALS)); \
+          rm -rf $(VENDOR_PATH)/$(filter-out $@,$(MAKECMDGOALS)); \
           echo "Deleted $(VENDOR_PATH)/$(filter-out $@,$(MAKECMDGOALS))"; \
         fi
 

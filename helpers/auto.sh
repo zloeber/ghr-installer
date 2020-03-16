@@ -7,7 +7,7 @@ INSTALL_PATH=${INSTALL_PATH:-"${HOME}/.local/bin"}
 VENDOR_REPO=${1:-""}
 PACKAGE_EXE=${2:-${VENDOR_REPO##*/}}
 PACKAGES_PATH="${PACKAGES_PATH:-"${ROOT_PATH}/.packages"}"
-IGNORED_EXT='(.tar.gz.asc|.txt|.tar.xz|.asc|.MD|.hsm|+ent.hsm|rpm|deb|sha256)'
+IGNORED_EXT='(.tar.gz.asc|.txt|.tar.xz|.asc|.MD|.hsm|+ent.hsm|.rpm|.deb|.sha256)'
 OS="${OS:-"linux"}"
 ARCH="${ARCH:-"amd64"}"
 VENDORPATH=${PACKAGES_PATH}/vendor
@@ -86,8 +86,8 @@ for ((i=0;i<cnt;i++)); do
 done
 
 #export DOWNLOAD_URL=$(whiptail --title "App URLs" --menu "Choose URL" 16 120 10 "${applist[@]}" 3>&1 1>&2 2>&3)
-export DOWNLOAD_URL=${applist[0]}
-if [ $? -ne 0 ] || [ -z $DOWNLOAD_URL ]; then
+export URL=${applist[0]}
+if [ $? -ne 0 ] || [ -z $URL ]; then
     echo "Download url not acquired."
     exit 1
 fi
@@ -100,7 +100,7 @@ if [ -z $VERSION ]; then
     VERSION=`echo "${latesturl}" | grep -o -E '[0-9]+.[0-9]+' | head -1`
 fi
 
-case ${DOWNLOAD_URL##*/} in
+case ${URL##*/} in
     *.tar.gz) packageType=tarball
         ;;
     *.zip) packageType=zip
@@ -117,12 +117,12 @@ esac;
 
 export PACKAGE_TYPE=${packageType}
 export PACKAGE_NAME=${PACKAGE_EXE}
-make --no-print-directory -f ${ROOT_PATH}/helpers/Makefile.package install
+# make --no-print-directory -f ${ROOT_PATH}/helpers/Makefile.package install
 
 ## Attempt to tokenize the DOWNLOAD_URL next
 # Construct a generic url to use based on selections
 PACKAGE_REPO_URL="https://github.com/${VENDOR_REPO}"
-URL=${DOWNLOAD_URL//${PACKAGE_REPO_URL}/\$(PACKAGE_REPO_URL)}
+URL=${URL//${PACKAGE_REPO_URL}/\$(PACKAGE_REPO_URL)}
 URL=${URL//${VERSION}/\$(PACKAGE_VERSION)}
 URL=${URL//${PACKAGE_EXE}/\$(PACKAGE_NAME)}
 URL=`echo $URL | sed -r 's/(linux|Linux|darwin|Darwin)/$(OS)/g' | \
@@ -155,3 +155,5 @@ if [ -d ${VENDORPATH}/${PACKAGE_EXE} ]; then
   echo "This package has been saved for future installation."
   echo "Please consider submitting this package to cloudposse/packages via a PR as well."
 fi
+
+make --no-print-directory -C ${ROOT_PATH} install ${PACKAGE_EXE}
