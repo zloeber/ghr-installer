@@ -125,9 +125,12 @@ PACKAGE_REPO_URL="https://github.com/${VENDOR_REPO}"
 URL=${URL//${PACKAGE_REPO_URL}/\$(PACKAGE_REPO_URL)}
 URL=${URL//${VERSION}/\$(PACKAGE_VERSION)}
 URL=${URL//${PACKAGE_EXE}/\$(PACKAGE_NAME)}
+
+## Some 'fuzzy' logic on how they may have named their releases...
 URL=`echo $URL | sed -r 's/(Linux|Darwin|Windows)/$(OS_UPPER)/g' | \
     sed -r 's/(linux|darwin|windows)/$(OS)/g' | \
-    sed -r 's/(amd64|Amd64|AMD64|x86-64|x86_64|x64|i386|armv6|arm64)/$(OS_ARCH)/g'`
+    sed -r 's/(x86-64|x86_64)/$(OS_ARCH)/g' | \
+    sed -r 's/(amd64|Amd64|AMD64)/$(ARCH)/g'`
 
 DESC=`get_github_project_description ${VENDOR_REPO}`
 LICENSE=`get_github_project_license ${VENDOR_REPO}`
