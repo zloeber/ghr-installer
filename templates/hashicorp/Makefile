@@ -2,9 +2,11 @@
 include ../../tasks/Makefile.package
 include ../../tasks/Makefile.apk
 
+OS_UPPER=$(shell uname -s)
+
 export VENDOR ?= hashicorp
 export PACKAGE_NAME ?= {{ .Env.APP }}
-export DOWNLOAD_URL ?= https://releases.hashicorp.com/$(PACKAGE_NAME)/$(PACKAGE_VERSION)/$(PACKAGE_NAME)_$(PACKAGE_VERSION)_$(OS)_$(ARCH).zip
+export DOWNLOAD_URL ?= https://releases.hashicorp.com/$(PACKAGE_NAME)/$(PACKAGE_VERSION)/$(PACKAGE_NAME)_$(PACKAGE_VERSION)_$(OS)_$(OS_ARCH).zip
 export APK_BUILD_TEMPLATE ?= APKBUILD.github-binary
 
 install:

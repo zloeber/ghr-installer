@@ -125,8 +125,9 @@ PACKAGE_REPO_URL="https://github.com/${VENDOR_REPO}"
 URL=${URL//${PACKAGE_REPO_URL}/\$(PACKAGE_REPO_URL)}
 URL=${URL//${VERSION}/\$(PACKAGE_VERSION)}
 URL=${URL//${PACKAGE_EXE}/\$(PACKAGE_NAME)}
-URL=`echo $URL | sed -r 's/(linux|Linux|darwin|Darwin)/$(OS)/g' | \
-    sed -r 's/(amd64|Amd64|AMD64|x86-64|x86_64|x64)/$(ARCH)/g'`
+URL=`echo $URL | sed -r 's/(Linux|Darwin|Windows)/$(OS_UPPER)/g' | \
+    sed -r 's/(linux|darwin|windows)/$(OS)/g' | \
+    sed -r 's/(amd64|Amd64|AMD64|x86-64|x86_64|x64|i386|armv6|arm64)/$(OS_ARCH)/g'`
 
 DESC=`get_github_project_description ${VENDOR_REPO}`
 LICENSE=`get_github_project_license ${VENDOR_REPO}`

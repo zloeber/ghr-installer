@@ -2,6 +2,8 @@
 include ../../tasks/Makefile.package
 include ../../tasks/Makefile.apk
 
+OS_UPPER=$(shell uname -s)
+
 export VENDOR = {{ .Env.VENDOR }}
 export PACKAGE_NAME = {{ .Env.PACKAGE_EXE }}
 export PACKAGE_REPO_NAME = {{ .Env.REPO }}

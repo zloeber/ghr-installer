@@ -6,13 +6,14 @@ Github Releases Installer
 
 This project allows for arbitrary github releases to be installed a bit more quickly on a system. As such, it can serve as a generic installer for your local non-root user based binary installs of github releases.
 
-## How It Works
-This started as a wrapper for cloudposse/packages to make authoring new packages for it a bit easier. Each package in this project is essentially a Makefile with some additional dressing that define how to install the app. This project automates the construction of those packages and runs them.
-
 ## Features
 
-- Auto-detect and install latest versions of single binary releases from github releases. 
+- Generate repeatable build scripts for your own pipeline scripts (installing an app spits output to the screen with all commands run to download/install the app)
+- Auto-detect and install latest versions of single binary releases from github releases.
 - Whiptail based console GUI helper functions for adding new vendor package templates to cloudposse/packages
+
+## How It Works
+This started as a wrapper for cloudposse/packages to make authoring new packages for it a bit easier. Each package in this project is essentially a Makefile with some additional dressing that define how to install the app. This project automates the construction of those packages and runs them.
 
 ## Installation
 
@@ -58,7 +59,7 @@ This will also work for any packages which you have done a walkthrough or auto i
 ### New Apps
 To be prompted for more information on a new app you wish to install run: `make new`
 
-Generically, you need 3 bits of information for installing an app from github when using this script:
+You need 3 bits of information for installing an app from github:
 
 - App: The target binary app which will be installed
 - Vendor: The github vendor name
@@ -66,7 +67,7 @@ Generically, you need 3 bits of information for installing an app from github wh
 
 The vendor/repo combo are in the github url for a project (ie. https://github.com/`<vendor>`/`<repo>`). The app name is differentiated as there are instances where the repo name and app name simply are not the same (example: there are multiple applications sourced from a single repo).
 
-> **NOTE**: At the first step, if you enter in an app that already exists in the '.packages/vendors' folder it will simply be installed again at that point.
+> **NOTE**: At the first step, if you enter in an app that already exists in the '.packages/vendors' folder it will simply be installed again with the known package definition. You can reset the package with `make reset <app>` and the definition will be deleted from the cached packages.
 
 If the vendor/repo has releases which are able to be downloaded the latest version will be displayed for selection. Once chosen you will then be prompted for an installation type. Generally this lines up with the file format being downloaded so pay attention to the download URL you have chosen in the prior step!
 
