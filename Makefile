@@ -36,6 +36,9 @@ endif
 ifeq (,$(wildcard $(INSTALL_PATH)/gomplate))
 	@make --no-print-directory install gomplate
 endif
+ifeq (,$(wildcard $(INSTALL_PATH)/jq))
+	@make --no-print-directory install jq
+endif
 
 install: init ## Install a package
 	@echo "$(BOLD)APP$(RESET): $(filter-out $@,$(MAKECMDGOALS))"
