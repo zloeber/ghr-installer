@@ -85,7 +85,6 @@ for ((i=0;i<cnt;i++)); do
     applist+=("")
 done
 
-#export DOWNLOAD_URL=$(whiptail --title "App URLs" --menu "Choose URL" 16 120 10 "${applist[@]}" 3>&1 1>&2 2>&3)
 export URL=${applist[0]}
 if [ $? -ne 0 ] || [ -z $URL ]; then
     echo "Download url not acquired."
@@ -130,7 +129,7 @@ URL=${URL//${PACKAGE_EXE}/\$(PACKAGE_NAME)}
 URL=`echo $URL | sed -r 's/(Linux|Darwin|Windows)/$(OS_UPPER)/g' | \
     sed -r 's/(linux|darwin|windows)/$(OS)/g' | \
     sed -r 's/(x86-64|x86_64)/$(OS_ARCH)/g' | \
-    sed -r 's/(amd64|Amd64|AMD64)/$(ARCH)/g'`
+    sed -r 's/(amd64|Amd64|AMD64|386|i386)/$(ARCH)/g'`
 
 DESC=`get_github_project_description ${VENDOR_REPO}`
 LICENSE=`get_github_project_license ${VENDOR_REPO}`
