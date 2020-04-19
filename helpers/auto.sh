@@ -5,7 +5,7 @@
 ROOT_PATH=${ROOT_PATH:-$(pwd)}
 INSTALL_PATH=${INSTALL_PATH:-"${HOME}/.local/bin"}
 VENDOR_REPO=${1:-""}
-PACKAGE_EXE=${2:-${VENDOR_REPO##*/}}
+PACKAGE_EXE=${PACKAGE_EXE:-${VENDOR_REPO##*/}}
 PACKAGES_PATH="${PACKAGES_PATH:-"${ROOT_PATH}/.packages"}"
 IGNORED_EXT='(.tar.gz.asc|.txt|.tar.xz|.asc|.MD|.hsm|+ent.hsm|.rpm|.deb|.sha256|.src.tar.gz)'
 OS="${OS:-"linux"}"
@@ -77,7 +77,7 @@ else
     echo  "${VENDORPATH}/${PACKAGE_EXE} is new, continuing.."
 fi
 
-latesturl=(`get_github_urls_by_platform "${VENDOR_REPO}" | grep -v -E "${IGNORED_EXT}"`)
+latesturl=(`get_github_urls_by_platform "${VENDOR_REPO}" | grep -v -E "${IGNORED_EXT}" | grep ${PACKAGE_EXE}`)
 applist=()
 cnt=${#latesturl[@]}
 for ((i=0;i<cnt;i++)); do
