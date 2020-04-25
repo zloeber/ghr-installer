@@ -24,16 +24,16 @@ VENDORPATH=${PACKAGES_PATH}/vendor
 # Scrapes the Hashicorp release endpoint for valid versions
 # Usage: get_hashicorp_version <app>
 function get_hashicorp_version () {
-	local vendorapp="${1?"Usage: $0 app"}"
-	# Scrape HTML from release page for binary versions, which are 
-	# given as ${binary}_<version>. We just use sed to extract.
-	curl -s "https://releases.hashicorp.com/${vendorapp}/" | grep -v -E "${IGNORED_EXT}" | sed -n "s|.*${vendorapp}_\([0-9\.]*\).*|\1|p" | sed -n 2p
+    local vendorapp="${1?"Usage: $0 app"}"
+    # Scrape HTML from release page for binary versions, which are 
+    # given as ${binary}_<version>. We just use sed to extract.
+    curl -s "https://releases.hashicorp.com/${vendorapp}/" | grep -v -E "${IGNORED_EXT}" | sed -n "s|.*${vendorapp}_\([0-9\.]*\).*|\1|p" | sed -n 2p
 }
 
 # Scrapes the Hashicorp release endpoint for valid apps
 # Usage: get_hashicorp_apps <app>
 function get_hashicorp_apps () {
-	# Scrape HTML from release page for binary app names
+    # Scrape HTML from release page for binary app names
     # There MUST be a better way to do this one... :)
     curl -s "https://releases.hashicorp.com/" | grep -o '<a .*href=\"/\(.*\)/">' | cut -d/ -f2 | grep -v -E "${HASHICORP_IGNORED}"
 }
@@ -44,21 +44,21 @@ function get_github_urls_by_platform {
     local vendorapp="${1?"Usage: $0 vendor/app"}"
     OS="${OS:-"linux"}"
     ARCH="${ARCH:-"amd64"}"
-	curl -s "https://api.github.com/repos/${vendorapp}/releases/latest" | \
-        jq -r --arg OS ${OS} --arg ARCH ${ARCH} \
-        '.assets[] | .browser_download_url'
+    curl -s "https://api.github.com/repos/${vendorapp}/releases/latest" | \
+     jq -r --arg OS ${OS} --arg ARCH ${ARCH} \
+     '.assets[] | .browser_download_url'
 }
 
 function get_github_project_description {
     # Description: Scrape github project for its description
     local vendorapp="${1?"Usage: $0 vendor/app"}"
-	curl -s "https://api.github.com/repos/${vendorapp}" | jq -r '.description'
+    curl -s "https://api.github.com/repos/${vendorapp}" | jq -r '.description'
 }
 
 function get_github_project_license {
     # Description: Scrape github project for its license
     local vendorapp="${1?"Usage: $0 vendor/app"}"
-	curl -s "https://api.github.com/repos/${vendorapp}" | jq -r '.license.spdx_id'
+    curl -s "https://api.github.com/repos/${vendorapp}" | jq -r '.license.spdx_id'
 }
 
 function get_github_version_by_tag {
@@ -109,6 +109,8 @@ case ${URL##*/} in
     *.tar.bz2) packageType=tar_bz2
         ;;
     *.tar.xz) packageType=tar_xz
+        ;;
+    *.tar) packageType=tarball
         ;;
     *) packageType=binary
         ;;
