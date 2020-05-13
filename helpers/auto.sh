@@ -77,7 +77,8 @@ else
     echo  "${VENDORPATH}/${PACKAGE_EXE} is new, continuing.."
 fi
 
-latesturl=(`get_github_urls_by_platform "${VENDOR_REPO}" | grep -v -E "${IGNORED_EXT}" | grep ${PACKAGE_EXE}`)
+#latesturl=(`get_github_urls_by_platform "${VENDOR_REPO}" | grep -v -E "${IGNORED_EXT}" | grep ${PACKAGE_EXE}`)
+latesturl=(`get_github_urls_by_platform "${VENDOR_REPO}" | grep -v -E "${IGNORED_EXT}" | grep -E "(${PACKAGE_EXE}|${VENDOR_REPO})"`)
 applist=()
 cnt=${#latesturl[@]}
 for ((i=0;i<cnt;i++)); do
@@ -129,7 +130,7 @@ URL=${URL//${PACKAGE_EXE}/\$(PACKAGE_NAME)}
 
 ## Some 'fuzzy' logic on how they may have named their releases...
 URL=`echo $URL | sed -r 's/(Linux|Darwin|Windows)/$(OS_UPPER)/g' | \
-    sed -r 's/(linux|darwin|windows)/$(OS)/g' | \
+    sed -r 's/(linux-gnu|linux|darwin|windows)/$(OS)/g' | \
     sed -r 's/(x86-64|x86_64)/$(OS_ARCH)/g' | \
     sed -r 's/(amd64|Amd64|AMD64|386|i386)/$(ARCH)/g'`
 
