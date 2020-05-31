@@ -2,7 +2,7 @@
 # Attempt to guess settings for a package binary install.
 # Author: Zachary Loeber
 
-eval `resize`
+#eval `resize`
 HEIGHT=15
 WIDTH=80
 ROOT_PATH=${ROOT_PATH:-$(pwd)}
