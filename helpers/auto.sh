@@ -7,7 +7,7 @@ INSTALL_PATH=${INSTALL_PATH:-"${HOME}/.local/bin"}
 VENDOR_REPO=${1:-""}
 PACKAGE_EXE=${PACKAGE_EXE:-${VENDOR_REPO##*/}}
 PACKAGES_PATH="${PACKAGES_PATH:-"${ROOT_PATH}/.packages"}"
-IGNORED_EXT='(.tar.gz.asc|.txt|.tar.xz|.asc|.MD|.hsm|+ent.hsm|.rpm|.deb|.sha256|.src.tar.gz|.sig|SHA256SUM|.log)'
+IGNORED_EXT='(.tar.gz.asc|.txt|.tar.xz|.asc|.MD|.hsm|\+ent.hsm|.rpm|.deb|.sha256|.src.tar.gz|.sig|SHA256SUM|.log)'
 OS="${OS:-"linux"}"
 ARCH="${ARCH:-"amd64"}"
 VENDORPATH=${PACKAGES_PATH}/vendor
@@ -41,7 +41,7 @@ function get_hashicorp_apps () {
 function get_github_urls_by_platform {
     # Description: Scrape github releases for most recent release of a project based on:
     # vendor, repo, os, and arch
-    local vendorapp="${1?"Usage: $0 vendor/app"}"
+    local vendorapp="${1?"Usage: get_github_urls_by_platform vendor/app"}"
     OS="${OS:-"linux"}"
     ARCH="${ARCH:-"amd64"}"
     curl -s "https://api.github.com/repos/${vendorapp}/releases/latest" | \
