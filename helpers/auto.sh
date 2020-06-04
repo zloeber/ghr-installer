@@ -45,20 +45,20 @@ function get_github_urls_by_platform {
     OS="${OS:-"linux"}"
     ARCH="${ARCH:-"amd64"}"
     curl -s "https://api.github.com/repos/${vendorapp}/releases/latest" | \
-     jq -r --arg OS ${OS} --arg ARCH ${ARCH} \
+     ${INSTALL_PATH}/jq -r --arg OS ${OS} --arg ARCH ${ARCH} \
      '.assets[] | .browser_download_url'
 }
 
 function get_github_project_description {
     # Description: Scrape github project for its description
     local vendorapp="${1?"Usage: $0 vendor/app"}"
-    curl -s "https://api.github.com/repos/${vendorapp}" | jq -r '.description'
+    curl -s "https://api.github.com/repos/${vendorapp}" | ${INSTALL_PATH}/jq -r '.description'
 }
 
 function get_github_project_license {
     # Description: Scrape github project for its license
     local vendorapp="${1?"Usage: $0 vendor/app"}"
-    curl -s "https://api.github.com/repos/${vendorapp}" | jq -r '.license.spdx_id'
+    curl -s "https://api.github.com/repos/${vendorapp}" | ${INSTALL_PATH}/jq -r '.license.spdx_id'
 }
 
 function get_github_version_by_tag {
@@ -144,8 +144,8 @@ echo "Template path for new application: ${VENDORPATH}/${PACKAGE_EXE}"
 mkdir -p ${VENDORPATH}/${PACKAGE_EXE}
 
 ${INSTALL_PATH}/gomplate \
---input-dir ${ROOT_PATH}/templates/generic \
---output-dir ${VENDORPATH}/${PACKAGE_EXE}
+    --input-dir ${ROOT_PATH}/templates/generic \
+    --output-dir ${VENDORPATH}/${PACKAGE_EXE}
 
 if [ -d ${VENDORPATH}/${PACKAGE_EXE} ]; then
   echo "Package Path: ${VENDORPATH}/${PACKAGE_EXE}"
