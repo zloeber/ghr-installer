@@ -129,10 +129,10 @@ URL=${URL//${VERSION}/\$(PACKAGE_VERSION)}
 URL=${URL//${PACKAGE_EXE}/\$(PACKAGE_NAME)}
 
 ## Some 'fuzzy' logic on how they may have named their releases...
-URL=`echo $URL | sed -r 's/(Linux|Darwin|Windows)/$(OS_UPPER)/g' | \
-    sed -r 's/(linux-gnu|linux|darwin|windows)/$(OS)/g' | \
-    sed -r 's/(x86-64|x86_64)/$(OS_ARCH)/g' | \
-    sed -r 's/(amd64|Amd64|AMD64|386|i386)/$(ARCH)/g'`
+URL=`echo $URL | sed -E 's/(Linux|Darwin|Windows)/$(OS_UPPER)/g' | \
+    sed -E 's/(linux-gnu|linux|darwin|windows)/$(OS)/g' | \
+    sed -E 's/(x86-64|x86_64)/$(OS_ARCH)/g' | \
+    sed -E 's/(amd64|Amd64|AMD64|386|i386)/$(ARCH)/g'`
 
 DESC=`get_github_project_description ${VENDOR_REPO}`
 LICENSE=`get_github_project_license ${VENDOR_REPO}`
