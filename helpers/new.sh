@@ -2,17 +2,6 @@
 # Attempt to guess settings for a package binary install.
 # Author: Zachary Loeber
 
-#eval `resize`
-HEIGHT=15
-WIDTH=80
-ROOT_PATH=${ROOT_PATH:-$(pwd)}
-INSTALL_PATH=${INSTALL_PATH:-"${HOME}/.local/bin"}
-PACKAGES_PATH="${PACKAGES_PATH:-"${ROOT_PATH}/.packages"}"
-IGNORED_EXT='(.tar.gz.asc|.txt|.tar.xz|.asc|.MD|.hsm|+ent.hsm|rpm|deb|sha256)'
-OS="${OS:-"linux"}"
-ARCH="${ARCH:-"amd64"}"
-VENDORPATH=${PACKAGES_PATH}/vendor
-
 # Scrapes the Hashicorp release endpoint for valid versions
 # Usage: get_hashicorp_version <app>
 function get_hashicorp_version () {
@@ -60,6 +49,21 @@ function get_github_version_by_tag {
         grep -oP '"tag_name": "\K(.*)(?=")' | \
         grep -o '[[:digit:]].[[:digit:]].[[:digit:]]'
 }
+
+HEIGHT=15
+WIDTH=80
+ROOT_PATH=${ROOT_PATH:-$(pwd)}
+INSTALL_PATH=${INSTALL_PATH:-"${HOME}/.local/bin"}
+PACKAGES_PATH="${PACKAGES_PATH:-"${ROOT_PATH}/.packages"}"
+OS="${OS:-"linux"}"
+ARCH="${ARCH:-"amd64"}"
+VENDORPATH=${PACKAGES_PATH}/vendor
+
+SCRIPT_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
+set -o allexport
+source "${SCRIPT_PATH}/ignored.env"
+set +o allexport
 
 export PACKAGE_EXE=$(whiptail --inputbox "App Name" 8 78 --title "Application Info" 3>&1 1>&2 2>&3)
 if [ $? -ne 0 ] || [ -z $PACKAGE_EXE ]; then

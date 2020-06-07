@@ -2,25 +2,6 @@
 # Attempt to guess settings for a package binary install.
 # Author: Zachary Loeber
 
-ROOT_PATH=${ROOT_PATH:-$(pwd)}
-INSTALL_PATH=${INSTALL_PATH:-"${HOME}/.local/bin"}
-VENDOR_REPO=${1:-""}
-PACKAGE_EXE=${PACKAGE_EXE:-${VENDOR_REPO##*/}}
-PACKAGES_PATH="${PACKAGES_PATH:-"${ROOT_PATH}/.packages"}"
-IGNORED_EXT='(.tar.gz.asc|.txt|.tar.xz|.asc|.MD|.hsm|\+ent.hsm|.rpm|.deb|.sha256|.src.tar.gz|.sig|SHA256SUM|.log)'
-OS="${OS:-"linux"}"
-ARCH="${ARCH:-"amd64"}"
-VENDORPATH=${PACKAGES_PATH}/vendor
-
-# if_os () { [[ $OSTYPE == *$1* ]]; }
-# if_arch () { [[ `uname -m` == *$1* ]]; }
-
-# if_os darwin && os_filter=(darwin|Darwin)
-# if_os linux && os_filter=(linux|Linux)
-# if_arch x86_64 && arch_filter=(amd64|Amd64|AMD64|x86-64|x86_64|x64)
-# if_arch 386 && arch_filter=(386|i386|i686)
-# if_arch arm && arch_filter=(arm64|arm)
-
 # Scrapes the Hashicorp release endpoint for valid versions
 # Usage: get_hashicorp_version <app>
 function get_hashicorp_version () {
@@ -68,6 +49,30 @@ function get_github_version_by_tag {
         grep -oP '"tag_name": "\K(.*)(?=")' | \
         grep -o '[[:digit:]].[[:digit:]].[[:digit:]]'
 }
+
+ROOT_PATH=${ROOT_PATH:-$(pwd)}
+INSTALL_PATH=${INSTALL_PATH:-"${HOME}/.local/bin"}
+VENDOR_REPO=${1:-""}
+PACKAGE_EXE=${PACKAGE_EXE:-${VENDOR_REPO##*/}}
+PACKAGES_PATH="${PACKAGES_PATH:-"${ROOT_PATH}/.packages"}"
+OS="${OS:-"linux"}"
+ARCH="${ARCH:-"amd64"}"
+VENDORPATH=${PACKAGES_PATH}/vendor
+SCRIPT_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
+set -o allexport
+source "${SCRIPT_PATH}/ignored.env"
+set +o allexport
+
+#IGNORED_EXT='(.tar.gz.asc|.txt|.tar.xz|.asc|.MD|.hsm|\+ent.hsm|.rpm|.deb|.sha256|.src.tar.gz|.sig|SHA256SUM|.log)'
+# if_os () { [[ $OSTYPE == *$1* ]]; }
+# if_arch () { [[ `uname -m` == *$1* ]]; }
+
+# if_os darwin && os_filter=(darwin|Darwin)
+# if_os linux && os_filter=(linux|Linux)
+# if_arch x86_64 && arch_filter=(amd64|Amd64|AMD64|x86-64|x86_64|x64)
+# if_arch 386 && arch_filter=(386|i386|i686)
+# if_arch arm && arch_filter=(arm64|arm)
 
 if [ -d "${VENDORPATH}/${PACKAGE_EXE}" ]; then
     echo  "${VENDORPATH}/${PACKAGE_EXE} already exists, installing.."

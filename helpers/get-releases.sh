@@ -2,7 +2,12 @@
 # Attempt to list current github releases for a package
 # Author: Zachary Loeber
 
-IGNORED_EXT='(.tar.gz.asc|.txt|.tar.xz|.asc|.MD|.hsm|+ent.hsm|rpm|deb|sha256)'
+SCRIPT_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
+set -o allexport
+source "${SCRIPT_PATH}/ignored.env"
+set +o allexport
+
 
 GH_RELEASE=${1:?"Usage: $0 vendor/repo"}
 
