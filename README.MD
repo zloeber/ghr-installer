@@ -1,4 +1,4 @@
-# GHR Installer
+# GHR-Installer (githubapp)
 
 Github Releases Installer
 
@@ -13,6 +13,7 @@ This project allows for arbitrary github releases to be installed a bit more qui
 - Whiptail based console GUI helper functions for adding new vendor package templates to cloudposse/packages
 
 ## How It Works
+
 This started as a wrapper for cloudposse/packages to make authoring new packages for it a bit easier. Each package in this project is essentially a Makefile with some additional dressing that define how to install the app. This project automates the construction of those packages and runs them.
 
 ## Installation
@@ -20,6 +21,7 @@ This started as a wrapper for cloudposse/packages to make authoring new packages
 Clone this repo into a folder of your choice. Run `make` to see the list of tasks. 
 
 ### Setup an Alias
+
 If you are not wanting to have to dive into this project folder everytime you want to install some app, you can setup an alias quite easily. In this example we clone this repo into `${HOME}/.local/app/ghr-installer`
 
 ```bash
@@ -77,7 +79,12 @@ This is the same as the new app (`make new`) walkthrough but without the prompti
 
 ```bash
 make auto zloeber/githubinfo
+
+# If the extracted binary file differs from the repo name you can use PACKAGE_EXE
+make auto zloeber/githubinfo PACKAGE_EXE=githubinfo
 ```
+
+> **NOTE:** The backend script for this task really just finds one specific version of the release download then automatically generates a packages template that then gets used for the actual download of the binary. It is pretty effective but may also result in false positives based on the naming convention of the released package being installed.
 
 ### List Download URLs
 
